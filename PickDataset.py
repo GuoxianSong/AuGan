@@ -51,7 +51,6 @@ def LoadAu(subject):
         dataMat[:, i] = tmpMat
     return dataMat
 
-
 def MakeDataset(FullLabelMat,rootDir):
     list_dirs = os.walk(rootDir)
     dataset_img =[]
@@ -91,15 +90,60 @@ def Randomzie(dataset_label,dataset_img):
     shuffled_img = dataset_img[permutation,:]
     return shuffled_label, shuffled_img
 
+def Run():
+    FullLabelMat= Read_label()
+    dataset_label,dataset_img=MakeDataset(FullLabelMat,data_path)
 
-FullLabelMat= Read_label()
-dataset_label,dataset_img=MakeDataset(FullLabelMat,data_path)
+    Randomzie(dataset_label,dataset_img)
+    print(np.shape(dataset_label),np.shape(dataset_img))
 
+    pickle_file = 'dataset.pickle'
+    try:
+      f = open(pickle_file, 'wb')
+      save = {
+        'label': dataset_label,
+        'img': dataset_img,
+        }
+      pickle.dump(save, f, pickle.HIGHEST_PROTOCOL)
+      f.close()
+    except Exception as e:
+      print('Unable to save data to', pickle_file, ':', e)
+      raise
 
+    statinfo = os.stat(pickle_file)
+    print('Compressed pickle size:', statinfo.st_size)
+
+def SubjectDataset(rootDir,subject):
+    list_dirs = os.walk(rootDir)
+    dataset_img =[]
+    dataset_label_=[]
+    dataset_label=np.array(LoadAu(13))[:,0]
+    for root, dirs, files in list_dirs:
+        subject_ = root[len(rootDir):]
+        if(subject_!=str(subject)):
+            continue
+
+        for f in files:
+            print(root + f)
+            img = cv2.imread(os.path.join(root, f))
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            img = np.reshape(img, (1, image_width * image_height))
+            if dataset_img == []:
+                dataset_img = img
+                dataset_label_ = np.array([int(dataset_label[int(re.split('L|R|.png', f)[1])])])
+            else:
+
+                dataset_img=np.append(dataset_img,img,axis=0)
+                dataset_label_=np.append(dataset_label_,np.array([int(dataset_label[int(re.split('L|R|.png', f)[1])])])
+                                          ,axis=0)
+
+    dataset_label_ = np.reshape(dataset_label_, (len(dataset_label), 1))
+    return dataset_label_, dataset_img
+
+dataset_label,dataset_img=SubjectDataset(data_path,13)
 Randomzie(dataset_label,dataset_img)
 print(np.shape(dataset_label),np.shape(dataset_img))
-
-pickle_file = 'dataset.pickle'
+pickle_file = 'testset.pickle'
 try:
   f = open(pickle_file, 'wb')
   save = {
@@ -114,5 +158,4 @@ except Exception as e:
 
 statinfo = os.stat(pickle_file)
 print('Compressed pickle size:', statinfo.st_size)
-
-sdadsfasd=1
+a=1
