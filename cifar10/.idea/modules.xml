@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../.idea/CNN.iml" filepath="$PROJECT_DIR$/../.idea/CNN.iml" />
+      <module fileurl="file:///media/songguoxian/b1efdde7-81bb-4db1-897b-b5ff506288bc/songguoxian/Dataset/.idea/Dataset.iml" filepath="/media/songguoxian/b1efdde7-81bb-4db1-897b-b5ff506288bc/songguoxian/Dataset/.idea/Dataset.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/cifar10.iml" filepath="$PROJECT_DIR$/.idea/cifar10.iml" />
     </modules>
   </component>
